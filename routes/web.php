@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('pages.home');
 // });
 Route::get('/test', 'HomeController@test');
+Route::get('/get_user_coin', 'HomeController@get_user_coin');
 
 Route::get('/', 'HomeController@index');
 Route::get('/main', 'HomeController@index');

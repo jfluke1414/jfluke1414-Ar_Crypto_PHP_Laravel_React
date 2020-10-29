@@ -234,8 +234,7 @@ class HomeController extends Controller
         return $result;
     }
     
-    
-    function dbtest(){
+    function test(){
         $con = DB::connection('mysql')->getDatabaseName();
         //$connection = mysqli_connect($database_host,$database_user,$database_password,$database_name);
         if(DB::connection('mysql')->getDatabaseName())

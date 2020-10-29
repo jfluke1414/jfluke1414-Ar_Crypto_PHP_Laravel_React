@@ -65891,27 +65891,61 @@ var Hello = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      category_name: []
+      items: []
     };
-    console.log('a1a1a1');
+    console.log('start');
     return _this;
   }
 
   _createClass(Hello, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      console.log('2222222');
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/index.php/test').then(function (response) {
+    key: "fetchGetData",
+    value: function fetchGetData() {
+      var _this2 = this;
+
+      console.log('2222222'); //original = axios.get('/index.php/get_user_coin').then(response => {console.log(response)}).catch(error =>{console.log(error)})
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/index.php/get_user_coin').then(function (response) {
         console.log(response);
+
+        _this2.setState({
+          items: response.data
+        });
       })["catch"](function (error) {
         console.log(error);
-      }); //fetch('https://jsonplaceholder.typicode.com/posts').then(res => console.log(res)).then((data) => {setState({category_name: data.message})})
+      });
+      /*fetch('/index.php/get_user_coin')
+      .then(response => { 
+      response.json()	
+      })
+      .then((data) => {
+      this.setState({items: data})
+      console.log(data)
+      }
+      )*/
+      //.catch(errorMsg => {
+      //	console.log(errorMsg)
+      //	this.setState({errorMsg : 'Error retreiving data'})			
+      //})
       //https://jsonplaceholder.typicode.com/posts
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this3 = this;
+
+      this.fetchGetData();
+      this.interval = setInterval(function () {
+        return _this3.fetchGetData();
+      }, 60 * 10 * 10); //10sec
     }
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "hello world"));
+      console.log(this.state);
+      var items = this.state.items;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: ""
+      }, items.sum_total));
     }
   }]);
 
@@ -65946,17 +65980,13 @@ __webpack_require__.r(__webpack_exports__);
 function Home() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Hello__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-header"
-  }, "asdfsafExample Component dasfsadfdsafdsafsadfasdfasdfdsaf"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "card-body"
-  }, "I'm an example component!"));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Hello__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Home);
 
-if (document.getElementById('maincontent')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Home, null), document.getElementById('maincontent'));
+if (document.getElementById('total_estimated_value')) {
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Home, null), document.getElementById('total_estimated_value'));
 }
 
 /***/ }),
