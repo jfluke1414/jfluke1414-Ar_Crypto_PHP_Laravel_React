@@ -11,26 +11,6 @@ use App\Coin_info;
 class HomeController extends Controller
 {
     function index(){
-//         try {
-//             $results = \DB::connection()->select(\DB::raw("SELECT * FROM coin_info"))->first();
-//             // Closures include ->first(), ->get(), ->pluck(), etc.
-//         } catch(\Illuminate\Database\QueryException $ex){
-//             dd($ex->getMessage());
-//             // Note any method of class PDOException can be called on $ex.
-//         }
-        
-//         $servername = "192.168.238.131";
-//         $username = "root";
-//         $password = "1234";
-        
-//         // Create connection
-//         $conn = new mysqli($servername, $username, $password);
-        
-//         // Check connection
-//         if ($conn->connect_error) {
-//             die("Connection failed: " . $conn->connect_error);
-//         }
-//         echo "Connected successfully";
 
         $data['exchange'] = $this->get_exchange_info();
         
@@ -229,18 +209,193 @@ class HomeController extends Controller
     }
 
     function get_exchange_info(){
-        $result = DB::table('exchange_rate')->get();
-        var_dump($result);
+        $result = DB::table('exchange_rate')->get();        
         return $result;
     }
     
-    function test(){
-        $con = DB::connection('mysql')->getDatabaseName();
-        //$connection = mysqli_connect($database_host,$database_user,$database_password,$database_name);
-        if(DB::connection('mysql')->getDatabaseName())
-        {
-             echo "Yes! successfully connected to the DB: " . DB::connection()->getDatabaseName();
+    function get_user_coin_areachart(){
+        $result = $this->get_user_coininfo();
+        
+        $sum_arr = $result['sum'];
+        $data = $result['data'];
+        
+        $year = date("Y");
+        $month = date("n");
+        $today = date("j");
+        $before_month = date("Y-m-d", strtotime( date("Y-m-d", strtotime( date("Y-m-d"))) . "-1 month" ));
+        $lastday_beforemonth = date("t", strtotime( date("Y-m-d", strtotime( date("Y-m-d") )) . "-1 month" )); //2020-08-31
+        $beforemonth_month = date("n", strtotime( date("Y-m-d", strtotime( date("Y-m-d") )) . "-1 month" ));//7
+        
+        $date_info = array(
+            'year' => $year,
+            'month' => $month,
+            'today' => $today,
+            'before_month' => $before_month,
+            'lastday_beforemonth' => $lastday_beforemonth,
+            'beforemonth_month' => $beforemonth_month
+        );
+        
+        $areachart_data = $this->get_total_fromto($today, $month, $year, $before_month, $lastday_beforemonth, $beforemonth_month);
+        
+        $areachart_data_arr = array();
+        foreach($areachart_data as $s){
+            array_push($areachart_data_arr, $s->sum);
         }
-        return $con;
+        
+        return response()->json(['status' => 'success', 'data' => $data, 'sum_arr' => $sum_arr, 'ereachart_data' => $areachart_data_arr, 'date_info' => $date_info]);
+//         echo json_encode(array('status' => 'success', 'data' => $data, 'sum_arr' => $sum_arr, 'ereachart_data' => $areachart_data_arr, 'date_info' => $date_info));
+//         exit;
     }
+    
+    function get_total_fromto($today, $month, $year, $before_month, $lastday_beforemonth, $beforemonth_month){
+        $month = sprintf('%02d',$month);
+        $user_id = 'jfluke1414@gmail.com';
+        $sql = 'SELECT * FROM user_total_info WHERE user_id ="'.$user_id.'" AND (date like "'.$before_month.' 03:00%" OR';
+        
+        for($i=$today;$i<=$lastday_beforemonth;$i++){
+            $i = sprintf('%02d',$i);
+            $sql .= ' DATE LIKE "'.$year.'-'.$beforemonth_month.'-'.$i.' 03:00%" OR ';
+        }
+        for($i=1;$i<=$today;$i++){
+            $i = sprintf('%02d',$i);
+            if($i==$today){
+                $sql .= ' DATE LIKE "'.$year.'-'.$month.'-'.$i.' 03:00%") ORDER BY DATE DESC;';
+            } else {
+                $sql .= ' DATE LIKE "'.$year.'-'.$month.'-'.$i.' 03:00%" OR';
+            }
+        }
+        
+        $result = DB::select($sql);
+        
+        return $result;
+    }
+    
+    
+    
+    function get_user_coininfo(){
+        $result = DB::table('user_coins')->where('user_id', '=', 'jfluke1414@gmail.com')->get();
+        
+        $currency_btc = 'btc';
+        $currency_eth = 'eth';
+        $currency_xrp = 'xrp';
+        $currency_ltc = 'ltc';
+        $currency_bch = 'bch';
+        $currency_dash = 'dash';
+        $currency_pib = 'pib';
+        $currency_qtum = 'qtum';
+        $currency_snt = 'snt';
+        
+        if($result){
+            foreach($result as $list){
+                $btc_count = $list->btc_count;
+                $eth_count = $list->eth_count;
+                $xrp_count = $list->xrp_count;
+                $ltc_count = $list->ltc_count;
+                $bch_count = $list->bch_count;
+                $dash_count = $list->dash_count;
+                $pib_count = $list->pib_count;
+                $qtum_count = $list->qtum_count;
+                $snt_count = $list->snt_count;
+            }
+        } else {
+            $btc_count = 0;
+            $eth_count = 0;
+            $xrp_count = 0;
+            $ltc_count = 0;
+            $bch_count = 0;
+            $dash_count = 0;
+            $pib_count = 0;
+            $qtum_count = 0;
+            $snt_count = 0;
+        }
+        
+        
+        $coin_datas = $this->get_coininfo_selected();
+        
+        foreach($coin_datas as $list){
+            if($list->currency == 'btc'){
+                $sum_btc = $list->price * $btc_count;
+                $btc_rate = $list->price;
+            }
+            if($list->currency == 'eth'){
+                $sum_eth = $list->price * $eth_count;
+                $eth_rate = $list->price;
+            }
+            if($list->currency == 'xrp'){
+                $sum_xrp = $list->price * $xrp_count;
+                $xrp_rate = $list->price;
+            }
+            if($list->currency == 'ltc'){
+                $sum_ltc = $list->price * $ltc_count;
+                $ltc_rate = $list->price;
+            }
+            if($list->currency == 'bch'){
+                $sum_bch = $list->price * $bch_count;
+                $bch_rate = $list->price;
+            }
+            if($list->currency == 'dash'){
+                $sum_dash = $list->price * $dash_count;
+                $dash_rate = $list->price;
+            }
+            if($list->currency == 'pib'){
+                $sum_pib = $list->price * $pib_count;
+                $pib_rate = $list->price;
+            }
+            if($list->currency == 'qtum'){
+                $sum_qtum = $list->price * $qtum_count;
+                $qtum_rate = $list->price;
+            }
+            if($list->currency == 'snt'){
+                $sum_snt = $list->price * $snt_count;
+                $snt_rate = $list->price;
+            }
+        }
+        
+        $subtracted_arr['data'] = array(
+            'currency_btc' => strtoupper($currency_btc),
+            'sum_btc' => $sum_btc,
+            
+            'currency_eth'=> strtoupper($currency_eth),
+            'sum_eth' => $sum_eth,
+            
+            'currency_xrp'=> strtoupper($currency_xrp),
+            'sum_xrp' => $sum_xrp,
+            
+            'currency_ltc' => strtoupper($currency_ltc),
+            'sum_ltc' => $sum_ltc,
+            
+            'currency_bch'=> strtoupper($currency_bch),
+            'sum_bch' => $sum_bch,
+            
+            'currency_dash' => strtoupper($currency_dash),
+            'sum_dash' => $sum_dash,
+            
+            'currency_pib'=> strtoupper($currency_pib),
+            'sum_pib' => $sum_pib,
+            
+            'currency_qtum'=> strtoupper($currency_qtum),
+            'sum_qtum' => $sum_qtum,
+            
+            'currency_snt'=> strtoupper($currency_snt),
+            'sum_snt' => $sum_snt,
+            
+            'sum_total' => $sum_btc+$sum_eth+$sum_xrp+$sum_ltc+$sum_bch+$sum_dash+$sum_qtum+$sum_pib+$sum_snt
+        );
+        
+        $subtracted_arr['sum'] = array(
+            'btc' => $sum_btc,
+            'eth' => $sum_eth,
+            'xrp' => $sum_xrp,
+            'bch' => $sum_bch,
+            'ltc' => $sum_ltc,
+            'dash' => $sum_dash,
+            'pib' => $sum_pib,
+            'qtum' => $sum_qtum,
+            'snt' => $sum_snt
+        );
+        
+        return $subtracted_arr;
+    }
+    
+    
 }

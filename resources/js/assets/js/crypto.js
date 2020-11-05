@@ -111,8 +111,7 @@ function startTimer(duration, display) {
 	
 }
 
-$(function() {
-	
+$(function() {	
 	var dataString = "";
 	$.ajax({
 		type:"POST",
@@ -141,7 +140,7 @@ $(function() {
 		//$("#total_value_count").empty();
 		//$("#total_value_count").append();
 
-	setInterval(function(){
+	setInterval(function(){		
 		$.ajax({
 		type:"POST",
 		url:"Main/get_user_coin_chart",

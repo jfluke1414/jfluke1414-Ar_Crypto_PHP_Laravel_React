@@ -9,16 +9,13 @@ class Hello extends React.Component {
 			items:[]
 			
 		}
-		console.log('start');
 	}
 	
 	
 	fetchGetData(){
-		console.log('2222222');
 		//original = axios.get('/index.php/get_user_coin').then(response => {console.log(response)}).catch(error =>{console.log(error)})
 		axios.get('/index.php/get_user_coin')
-			.then(response => {
-				console.log(response)
+			.then(response => {				
 				this.setState({ items: response.data })
 			})
 			.catch(error =>
@@ -45,17 +42,13 @@ class Hello extends React.Component {
 		this.interval = setInterval(() => this.fetchGetData(), 60*10*10);//10sec
 	}
 	
-	render() {
-		console.log(this.state)
+	render() {		
 		const {items} = this.state
 		return (
 			<div>
 				<div key="">{items.sum_total}</div> 
 			</div>
-			
-			
-			
-			
+
 		);	
 	}	
 }

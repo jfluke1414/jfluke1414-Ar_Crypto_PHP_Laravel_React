@@ -13,4 +13,5 @@ require('./bootstrap');
  */
 
 require('./components/Home');
+require('./components/Totalvalue');
 //require('./components/Example');

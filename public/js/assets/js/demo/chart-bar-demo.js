@@ -28,10 +28,10 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 }
 
 var dataString = "";
-/*
+
 $.ajax({
-	type:"POST",
-	url:"Main/get_user_coin_chart",
+	type:"GET",
+	url:"index.php/get_user_coin_areachart",
 	data:dataString,
 	dataType:"json",
 	encode:true,
@@ -157,7 +157,7 @@ $.ajax({
 		});
 	},
 	error: function(data){
-		alert('fail');
+		alert('fail getting data in the chartbar');
 	}
 })
 

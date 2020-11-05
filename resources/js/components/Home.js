@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios'
 import Hello from '../components/Hello'
+import Totalvalue from '../components/Totalvalue'
 //import Header from '../components/Header'
                    
 function Home() {
 	return (
         <div className="container">
 				<Hello />
+				
                 
         </div>
     );	

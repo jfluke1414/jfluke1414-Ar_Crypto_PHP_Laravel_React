@@ -70,6 +70,8 @@
   
   
 
+
+
  <script>
 
 //moveType (0:left / 1:right) 

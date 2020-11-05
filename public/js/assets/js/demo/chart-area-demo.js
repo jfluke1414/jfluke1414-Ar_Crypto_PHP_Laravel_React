@@ -29,15 +29,21 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 
 
 var dataString = "";
-/*
+$.ajaxSetup({
+      headers: {
+        'X-CSSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
 $.ajax({
-	type:"POST",
-	url:"Main/get_user_coin_areachart",
-	data:dataString,
+	
+	type:"GET",
+	url:"index.php/get_user_coin_areachart",
+	//data: { dataString: dataString, _token: '{{csrf_token()}}' },
 	dataType:"json",
 	encode:true,
 	success: function(data){
-
+		
 		var year = data.date_info.year;
 		var month = data.date_info.month;
 		var today = data.date_info.today;
@@ -168,7 +174,7 @@ $.ajax({
 			});
 	},
 	error: function(data){
-		alert('fail');
+		console.log('fail getting data in the chartaera');
 	}
 })
 

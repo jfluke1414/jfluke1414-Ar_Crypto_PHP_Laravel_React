@@ -3,10 +3,10 @@ Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,Bli
 Chart.defaults.global.defaultFontColor = '#858796';
 
 var dataString = "";
-/*
+
 $.ajax({
-	type:"POST",
-	url:"Main/get_user_coin_chart",
+	type:"GET",
+	url:"index.php/get_user_coin_areachart",
 	data:dataString,
 	dataType:"json",
 	encode:true,
@@ -27,12 +27,12 @@ $.ajax({
 		var sum_arr = new Array();
 		//var obj = JSON.parse(JSON.stringify(data.sum_arr));
 		
-		->주석해야함
+		/*
 		for(var i in obj){
 			sum_arr.push(obj[i]);
 		}
 		
-		->주석해야함
+		
 		for(var i=0;i<sum_arr.length;i++){
 			console.log(sum_arr[i]);
 			if(sum_arr[i] != 0){
@@ -42,7 +42,7 @@ $.ajax({
 	            +'</span>'
 	          +'</div>');		
 			}
-		}
+		}*/
 		
 		
 		$.each(data.sum_arr, function(key, value){

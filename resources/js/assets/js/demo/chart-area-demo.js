@@ -1,3 +1,4 @@
+
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
@@ -27,17 +28,16 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
-
 var dataString = "";
 
 $.ajax({
 	type:"POST",
-	url:"Main/get_user_coin_areachart",
+	url:"index.php/get_user_coin_areachart",
 	data:dataString,
 	dataType:"json",
 	encode:true,
 	success: function(data){
-
+		console.log(data.date_info);
 		var year = data.date_info.year;
 		var month = data.date_info.month;
 		var today = data.date_info.today;
@@ -168,7 +168,7 @@ $.ajax({
 			});
 	},
 	error: function(data){
-		alert('fail');
+		alert('failed getting data in the areachart');
 	}
 })
 

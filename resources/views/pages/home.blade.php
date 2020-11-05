@@ -52,7 +52,7 @@
 			}
 			if($list->currency == 'pib'){
 				$coinone_pib_currency = strtoupper($list->currency);
-				$coinone_pib_last = number_format($list->price, 2, '.', ',');
+				$coinone_pib_last = number_format($list->price, 4, '.', ',');
 			}
 		?>
       	@endforeach
@@ -313,11 +313,12 @@
             </div>
         </div>
         
+        
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top: 20px;">
             <h1 class="h3 mb-0 text-gray-800">DASHBOARD</h1>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
           </div>
@@ -545,7 +546,7 @@
                     <tr>
                       <!-- <th colspan="2" style="text-align:center;">COIN</th> -->
                       <th colspan="2" style="text-align:center;">TOTAL AMOUNT</th>
-                      <th colspan="2" style="color:red;">{{$total}}</th>
+                      <th colspan="2" style="color:red;"><div id="totalvalue"></div></th>
                     </tr>
                   </tfoot>
                   	<tr>
