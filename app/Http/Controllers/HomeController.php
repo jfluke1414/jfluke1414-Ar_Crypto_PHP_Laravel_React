@@ -398,4 +398,68 @@ class HomeController extends Controller
     }
     
     
+    function test_get_user_coin_areachart(){
+        $result = $this->get_user_coininfo();
+        
+        $sum_arr = $result['sum'];
+        $data = $result['data'];
+        
+        $year = date("Y");
+        $month = date("n");
+        $today = date("j");
+        $before_month = date("Y-m-d", strtotime( date("Y-m-d", strtotime( date("Y-m-d"))) . "-1 month" ));
+        $lastday_beforemonth = date("t", strtotime( date("Y-m-d", strtotime( date("Y-m-d") )) . "-1 month" )); //2020-08-31
+        $beforemonth_month = date("n", strtotime( date("Y-m-d", strtotime( date("Y-m-d") )) . "-1 month" ));//7
+        
+        $date_info = array(
+            'year' => $year,
+            'month' => $month,
+            'today' => $today,
+            'before_month' => $before_month,
+            'lastday_beforemonth' => $lastday_beforemonth,
+            'beforemonth_month' => $beforemonth_month
+        );
+        
+        $areachart_data = $this->get_total_fromto($today, $month, $year, $before_month, $lastday_beforemonth, $beforemonth_month);
+        
+        $areachart_data_arr = array();
+        foreach($areachart_data as $s){
+            array_push($areachart_data_arr, $s->sum);
+        }
+        
+        return response()->json(['status' => 'success', 'data' => $data, 'sum_arr' => $sum_arr, 'ereachart_data' => $areachart_data_arr, 'date_info' => $date_info]);
+        //         echo json_encode(array('status' => 'success', 'data' => $data, 'sum_arr' => $sum_arr, 'ereachart_data' => $areachart_data_arr, 'date_info' => $date_info));
+        //         exit;
+    }
+    
+    function test_get_total_fromto(){
+        $year = date("Y");
+        $month = date("n");
+        $today = date("j");
+        $before_month = date("Y-m-d", strtotime( date("Y-m-d", strtotime( date("Y-m-d"))) . "-1 month" ));
+        $lastday_beforemonth = date("t", strtotime( date("Y-m-d", strtotime( date("Y-m-d") )) . "-1 month" )); //2020-08-31
+        $beforemonth_month = date("n", strtotime( date("Y-m-d", strtotime( date("Y-m-d") )) . "-1 month" ));//7
+        
+        $month = sprintf('%02d',$month);
+        $user_id = 'jfluke1414@gmail.com';
+        $sql = 'SELECT * FROM user_total_info WHERE user_id ="'.$user_id.'" AND (date like "'.$before_month.' 03:00%" OR';
+        
+        for($i=$today;$i<=$lastday_beforemonth;$i++){
+            $i = sprintf('%02d',$i);
+            $sql .= ' DATE LIKE "'.$year.'-'.$beforemonth_month.'-'.$i.' 03:00%" OR ';
+        }
+        for($i=1;$i<=$today;$i++){
+            $i = sprintf('%02d',$i);
+            if($i==$today){
+                $sql .= ' DATE LIKE "'.$year.'-'.$month.'-'.$i.' 03:00%") ORDER BY DATE DESC;';
+            } else {
+                $sql .= ' DATE LIKE "'.$year.'-'.$month.'-'.$i.' 03:00%" OR';
+            }
+        }
+        
+        $result = DB::select($sql);
+        
+        return $result;
+    }
+    
 }

@@ -2,15 +2,12 @@ import React from 'react'
 import axios from 'axios'
 
 class Hello extends React.Component {
-	
 	constructor(props){
 		super(props)
 		this.state = {
 			items:[]
-			
 		}
 	}
-	
 	
 	fetchGetData(){
 		//original = axios.get('/index.php/get_user_coin').then(response => {console.log(response)}).catch(error =>{console.log(error)})
@@ -32,7 +29,7 @@ class Hello extends React.Component {
 			)*/
 			//.catch(errorMsg => {
 			//	console.log(errorMsg)
-			//	this.setState({errorMsg : 'Error retreiving data'})			
+			//	this.setState({errorMsg : 'Error retreiving data'})
 			//})
 		//https://jsonplaceholder.typicode.com/posts
 	}
@@ -48,7 +45,6 @@ class Hello extends React.Component {
 			<div>
 				<div key="">{items.sum_total}</div> 
 			</div>
-
 		);	
 	}	
 }

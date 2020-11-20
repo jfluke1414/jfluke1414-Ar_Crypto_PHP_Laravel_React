@@ -28,6 +28,12 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 }
 
 
+if(window.location.pathname.indexOf("index.php") < 0){	   
+	urls = "index.php/get_user_coin_areachart";
+} else {	    		
+	urls = "get_user_coin_areachart";
+}
+
 var dataString = "";
 $.ajaxSetup({
       headers: {
@@ -38,7 +44,7 @@ $.ajaxSetup({
 $.ajax({
 	
 	type:"GET",
-	url:"index.php/get_user_coin_areachart",
+	url:urls,
 	//data: { dataString: dataString, _token: '{{csrf_token()}}' },
 	dataType:"json",
 	encode:true,

@@ -65922,7 +65922,7 @@ var Hello = /*#__PURE__*/function (_React$Component) {
       )*/
       //.catch(errorMsg => {
       //	console.log(errorMsg)
-      //	this.setState({errorMsg : 'Error retreiving data'})			
+      //	this.setState({errorMsg : 'Error retreiving data'})
       //})
       //https://jsonplaceholder.typicode.com/posts
     }

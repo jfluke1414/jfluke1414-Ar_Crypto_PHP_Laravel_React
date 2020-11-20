@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/get_user_coin', 'HomeController@get_user_coin');
 Route::get('/get_coinone_info', 'HomeController@get_coinone_info');
 Route::get('/get_user_coin_areachart', 'HomeController@get_user_coin_areachart');
+Route::get('/test_get_user_coin_areachart', 'HomeController@test_get_user_coin_areachart');
+Route::get('/test_get_total_fromto', 'HomeController@test_get_total_fromto');
+
 
 
 Route::get('/', 'HomeController@index');

@@ -4,9 +4,16 @@ Chart.defaults.global.defaultFontColor = '#858796';
 
 var dataString = "";
 
+
+if(window.location.pathname.indexOf("index.php") < 0){	   
+	urls = "index.php/get_user_coin_areachart";
+} else {	    		
+	urls = "get_user_coin_areachart";
+}
+
 $.ajax({
 	type:"GET",
-	url:"index.php/get_user_coin_areachart",
+	url:urls,
 	data:dataString,
 	dataType:"json",
 	encode:true,
